@@ -54,21 +54,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- State Management ---
     let savedTasks = JSON.parse(localStorage.getItem('hciTasks')) || [];
+    // Migration for backwards compatibility (string -> object)
+    savedTasks = savedTasks.map(task => {
+        return typeof task === 'string' ? { text: task, completed: false } : task;
+    });
+
     const defaultAvatar = "https://i.pravatar.cc/150?img=11";
 
     function saveTasksToStorage() {
         localStorage.setItem('hciTasks', JSON.stringify(savedTasks));
     }
 
+    function updateDashboardStats() {
+        const totalCount = savedTasks.length;
+        const completedCount = savedTasks.filter(t => t.completed).length;
+
+        const totalEl = document.getElementById('total-tasks-count');
+        const completedEl = document.getElementById('completed-tasks-count');
+
+        if (totalEl) totalEl.textContent = totalCount;
+        if (completedEl) completedEl.textContent = completedCount;
+    }
+
     function renderTasks() {
         taskList.innerHTML = '';
-        savedTasks.forEach((task, index) => {
+        savedTasks.forEach((taskObj, index) => {
             const li = document.createElement('li');
-            li.className = 'task-item';
+            li.className = `task-item ${taskObj.completed ? 'completed' : ''}`;
             li.innerHTML = `
-                <span>${task}</span>
-                <button class="delete-btn" data-index="${index}"><i class="ri-delete-bin-line"></i></button>
+                <span>${taskObj.text}</span>
+                <div class="task-actions">
+                    <button class="task-btn complete-btn" aria-label="Toggle Complete" data-index="${index}">
+                        <i class="${taskObj.completed ? 'ri-checkbox-circle-fill' : 'ri-checkbox-blank-circle-line'}"></i>
+                    </button>
+                    <button class="task-btn delete-btn" aria-label="Delete Task" data-index="${index}">
+                        <i class="ri-delete-bin-line"></i>
+                    </button>
+                </div>
             `;
+
+            li.querySelector('.complete-btn').addEventListener('click', (e) => {
+                const idx = parseInt(e.currentTarget.dataset.index);
+                savedTasks[idx].completed = !savedTasks[idx].completed;
+                saveTasksToStorage();
+                renderTasks();
+            });
 
             li.querySelector('.delete-btn').addEventListener('click', (e) => {
                 const idx = parseInt(e.currentTarget.dataset.index);
@@ -85,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             taskList.appendChild(li);
         });
+        updateDashboardStats();
     }
 
     // Initial render
@@ -112,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleAddTask() {
         const text = taskInput.value.trim();
         if (text) {
-            savedTasks.push(text);
+            savedTasks.push({ text: text, completed: false });
             saveTasksToStorage();
             renderTasks();
             taskInput.value = '';
@@ -261,10 +292,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let navigatedToTask = false;
         // Check if the command matches any task name globally
-        for (let task of savedTasks) {
-            if (text.includes(task.toLowerCase())) {
+        for (let taskObj of savedTasks) {
+            if (text.includes(taskObj.text.toLowerCase())) {
                 navigateTo('tasks');
-                showToast(`Navigated to tasks for: ${task}`, 'success');
+                showToast(`Navigated to tasks for: ${taskObj.text}`, 'success');
                 navigatedToTask = true;
                 break;
             }

@@ -405,7 +405,17 @@ header {
     transform: translateX(5px);
 }
 
-.delete-btn {
+.task-item.completed span {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+.task-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.task-btn {
     background: transparent;
     border: none;
     color: var(--text-muted);
@@ -414,6 +424,11 @@ header {
     padding: 5px;
     border-radius: 5px;
     transition: all 0.2s;
+}
+
+.complete-btn:hover {
+    color: var(--neon-success);
+    background: rgba(16, 185, 129, 0.1);
 }
 
 .delete-btn:hover {
