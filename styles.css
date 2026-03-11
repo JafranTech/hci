@@ -593,3 +593,96 @@ header {
         transform: translateX(100%);
     }
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        padding: 0.5rem;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        border-right: none;
+        border-top: 1px solid var(--border-glass);
+        justify-content: center;
+        z-index: 50;
+    }
+
+    .logo,
+    .hci-badge {
+        display: none;
+        /* Hide on mobile to save space */
+    }
+
+    .nav-links {
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-around;
+        gap: 0;
+    }
+
+    .nav-links li {
+        flex-direction: column;
+        gap: 5px;
+        padding: 8px;
+        font-size: 0.75rem;
+    }
+
+    .nav-links li:hover {
+        transform: none;
+        /* Disable shift on mobile */
+    }
+
+    .nav-links li.active {
+        border-left: none;
+        border-top: 3px solid var(--neon-primary);
+        background: radial-gradient(circle at top, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+    }
+
+    .main-content {
+        padding: 1rem;
+        padding-bottom: 90px;
+        /* Clear the bottom nav */
+    }
+
+    header {
+        margin-bottom: 1.5rem;
+    }
+
+    .header-title h1 {
+        font-size: 1.5rem;
+    }
+
+    .voice-nav-container {
+        bottom: 85px;
+        /* Float above the navigation bar */
+        right: 20px;
+    }
+
+    .voice-btn {
+        width: 55px;
+        height: 55px;
+        font-size: 1.5rem;
+    }
+
+    .toast-container {
+        right: 10px;
+        left: 10px;
+        top: 10px;
+    }
+
+    .task-input-container {
+        flex-direction: column;
+    }
+
+    .primary-btn {
+        justify-content: center;
+        padding: 12px;
+    }
+}
