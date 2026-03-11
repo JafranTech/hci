@@ -4,7 +4,7 @@
 // 3. User Control & Freedom (Voice commands, Undo capabilities)
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     // --- Navigation Logic ---
     const navLinks = document.querySelectorAll('.nav-links li');
     const pages = document.querySelectorAll('.page');
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function navigateTo(pageId) {
         // Find the matching nav link
         let targetNav = Array.from(navLinks).find(nav => nav.dataset.page === pageId);
-        if(!targetNav) return; // invalid page
+        if (!targetNav) return; // invalid page
 
         // Update Nav UI
         navLinks.forEach(link => link.classList.remove('active'));
@@ -52,6 +52,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const addTaskBtn = document.getElementById('add-task-btn');
     const taskList = document.getElementById('task-list');
 
+    // --- State Management ---
+    let savedTasks = JSON.parse(localStorage.getItem('hciTasks')) || [];
+    const defaultAvatar = "https://i.pravatar.cc/150?img=11";
+
+    function saveTasksToStorage() {
+        localStorage.setItem('hciTasks', JSON.stringify(savedTasks));
+    }
+
+    function renderTasks() {
+        taskList.innerHTML = '';
+        savedTasks.forEach((task, index) => {
+            const li = document.createElement('li');
+            li.className = 'task-item';
+            li.innerHTML = `
+                <span>${task}</span>
+                <button class="delete-btn" data-index="${index}"><i class="ri-delete-bin-line"></i></button>
+            `;
+
+            li.querySelector('.delete-btn').addEventListener('click', (e) => {
+                const idx = parseInt(e.currentTarget.dataset.index);
+                const deletedTask = savedTasks.splice(idx, 1)[0];
+                saveTasksToStorage();
+                renderTasks();
+
+                showToast(`Task Deleted`, 'warning', true, () => {
+                    savedTasks.splice(idx, 0, deletedTask); // insert it back
+                    saveTasksToStorage();
+                    renderTasks();
+                });
+            });
+
+            taskList.appendChild(li);
+        });
+    }
+
+    // Initial render
+    renderTasks();
+
     // Prevent errors: Disable button when input is empty
     taskInput.addEventListener('input', (e) => {
         if (e.target.value.trim().length > 0) {
@@ -62,44 +100,59 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     addTaskBtn.addEventListener('click', () => {
+        handleAddTask();
+    });
+
+    taskInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleAddTask();
+        }
+    });
+
+    function handleAddTask() {
         const text = taskInput.value.trim();
         if (text) {
-            addTask(text);
+            savedTasks.push(text);
+            saveTasksToStorage();
+            renderTasks();
             taskInput.value = '';
             addTaskBtn.setAttribute('disabled', 'true'); // reset
             showToast('Task added successfully', 'success');
         }
-    });
-
-    function addTask(text) {
-        const li = document.createElement('li');
-        li.className = 'task-item';
-        li.innerHTML = `
-            <span>${text}</span>
-            <button class="delete-btn"><i class="ri-delete-bin-line"></i></button>
-        `;
-        
-        // Attach delete event
-        li.querySelector('.delete-btn').addEventListener('click', () => {
-            li.remove();
-            // User Control and Freedom: Provide an Undo option in the toast
-            showToast(`Task Deleted`, 'warning', true, () => {
-                taskList.appendChild(li); // Re-add the element on undo
-            });
-        });
-
-        taskList.appendChild(li);
     }
 
-    // Setup initial delete buttons
-    document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const li = e.target.closest('.task-item');
-            li.remove();
-            showToast(`Task Deleted`, 'warning', true, () => {
-                taskList.appendChild(li); 
-            });
-        });
+    // --- Profile Logic ---
+    const profileImageUpload = document.getElementById('profile-image-upload');
+    const profilePreview = document.getElementById('profile-preview');
+    const headerAvatar = document.getElementById('header-avatar');
+    const profileNameInput = document.getElementById('profile-name');
+    const saveProfileBtn = document.getElementById('save-profile-btn');
+
+    // Load profile from storage
+    const storedProfile = JSON.parse(localStorage.getItem('hciProfile')) || { name: '', image: defaultAvatar };
+    profileNameInput.value = storedProfile.name;
+    profilePreview.src = storedProfile.image;
+    headerAvatar.src = storedProfile.image;
+
+    profileImageUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                profilePreview.src = event.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    saveProfileBtn.addEventListener('click', () => {
+        const newProfile = {
+            name: profileNameInput.value.trim(),
+            image: profilePreview.src
+        };
+        localStorage.setItem('hciProfile', JSON.stringify(newProfile));
+        headerAvatar.src = newProfile.image;
+        showToast('Profile saved successfully', 'success');
     });
 
     // --- Toast Notification System ---
@@ -108,19 +161,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function showToast(message, type = 'info', setupUndo = false, undoCallback = null) {
         const toast = document.createElement('div');
         toast.className = 'toast';
-        
+
         // Dynamic border color based on type
         let borderColor = 'var(--neon-primary)';
-        if(type === 'success') borderColor = 'var(--neon-success)';
-        if(type === 'warning') borderColor = 'var(--neon-warning)';
-        
+        if (type === 'success') borderColor = 'var(--neon-success)';
+        if (type === 'warning') borderColor = 'var(--neon-warning)';
+
         toast.style.borderLeftColor = borderColor;
 
         let innerHTML = `<span class="toast-message">${message}</span>`;
         if (setupUndo) {
             innerHTML += `<button class="toast-undo">Undo</button>`;
         }
-        
+
         toast.innerHTML = innerHTML;
         toastContainer.appendChild(toast);
 
@@ -146,36 +199,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Voice Navigation Logic ---
     const voiceBtn = document.getElementById('voice-btn');
     const voiceStatus = document.getElementById('voice-status');
-    
+
     // Check if browser supports speech recognition
     const windowSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    
+
     if (windowSpeechRecognition) {
         const recognition = new windowSpeechRecognition();
         recognition.continuous = false; // Stop after a command
         recognition.interimResults = false;
         recognition.lang = 'en-US'; // English, but handles approximations of "home ku po"
 
-        recognition.onstart = function() {
+        recognition.onstart = function () {
             voiceBtn.classList.add('listening');
             voiceStatus.textContent = 'Listening...';
             voiceStatus.classList.add('visible');
             showToast('Voice navigation listening', 'info');
         };
 
-        recognition.onresult = function(event) {
+        recognition.onresult = function (event) {
             const transcript = event.results[0][0].transcript.toLowerCase();
             voiceStatus.textContent = `You said: "${transcript}"`;
-            
+
             // Artificial intelligence parsing! (Pattern matching)
             processVoiceCommand(transcript);
-            
+
             setTimeout(() => {
                 voiceStatus.classList.remove('visible');
             }, 3000);
         };
 
-        recognition.onerror = function(event) {
+        recognition.onerror = function (event) {
             console.error(event.error);
             voiceStatus.textContent = 'Error: Could not understand.';
             voiceBtn.classList.remove('listening');
@@ -185,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 3000);
         };
 
-        recognition.onend = function() {
+        recognition.onend = function () {
             voiceBtn.classList.remove('listening');
         };
 
@@ -205,12 +258,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function processVoiceCommand(text) {
         console.log("Processing command: ", text);
-        
+
+        let navigatedToTask = false;
+        // Check if the command matches any task name globally
+        for (let task of savedTasks) {
+            if (text.includes(task.toLowerCase())) {
+                navigateTo('tasks');
+                showToast(`Navigated to tasks for: ${task}`, 'success');
+                navigatedToTask = true;
+                break;
+            }
+        }
+
+        if (navigatedToTask) return;
+
         // Command mappings covering both English and Tamil transliteration heuristics
         // "home ku ponom", "go to home", "show home"
         if (text.includes('home')) {
             navigateTo('home');
-        } 
+        }
         else if (text.includes('task') || text.includes('work') || text.includes('todo') || text.includes('to-do')) {
             navigateTo('tasks');
         }
@@ -221,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
             navigateTo('settings');
         }
         else {
-             showToast('Command not recognized. Try "Go to Tasks"', 'warning');
+            showToast('Command not recognized. Try "Go to Tasks"', 'warning');
         }
     }
 

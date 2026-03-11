@@ -3,15 +3,19 @@
     --bg-glass: rgba(30, 41, 59, 0.7);
     --bg-glass-hover: rgba(51, 65, 85, 0.8);
     --border-glass: rgba(255, 255, 255, 0.1);
-    
-    --neon-primary: #8b5cf6; /* Vibrant Purple */
-    --neon-secondary: #06b6d4; /* Cyan */
-    --neon-success: #10b981; /* Green */
-    --neon-danger: #ef4444; /* Red */
-    
+
+    --neon-primary: #8b5cf6;
+    /* Vibrant Purple */
+    --neon-secondary: #06b6d4;
+    /* Cyan */
+    --neon-success: #10b981;
+    /* Green */
+    --neon-danger: #ef4444;
+    /* Red */
+
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
-    
+
     --transition-speed: 0.3s;
 }
 
@@ -28,8 +32,8 @@ body {
     min-height: 100vh;
     overflow: hidden;
     /* Subtle background grid pattern for depth */
-    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     background-size: 50px 50px;
 }
 
@@ -63,6 +67,7 @@ body {
     letter-spacing: 1px;
     background: linear-gradient(45deg, var(--neon-cyan), var(--neon-primary));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
 }
@@ -99,7 +104,7 @@ body {
 }
 
 .nav-links li.active {
-    background: linear-gradient(90deg, rgba(139,92,246,0.2) 0%, transparent 100%);
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.2) 0%, transparent 100%);
     color: var(--neon-primary);
     border-left: 4px solid var(--neon-primary);
 }
@@ -215,10 +220,25 @@ header {
     color: var(--text-main);
 }
 
-.glow-blue { color: var(--neon-secondary); text-shadow: 0 0 15px var(--neon-secondary); }
-.glow-green { color: var(--neon-success); text-shadow: 0 0 15px var(--neon-success); }
-.glow-purple { color: var(--neon-primary); text-shadow: 0 0 15px var(--neon-primary); }
-.glow-cyan { color: var(--neon-secondary); text-shadow: 0 0 15px var(--neon-secondary); }
+.glow-blue {
+    color: var(--neon-secondary);
+    text-shadow: 0 0 15px var(--neon-secondary);
+}
+
+.glow-green {
+    color: var(--neon-success);
+    text-shadow: 0 0 15px var(--neon-success);
+}
+
+.glow-purple {
+    color: var(--neon-primary);
+    text-shadow: 0 0 15px var(--neon-primary);
+}
+
+.glow-cyan {
+    color: var(--neon-secondary);
+    text-shadow: 0 0 15px var(--neon-secondary);
+}
 
 .huge-icon {
     font-size: 4rem;
@@ -234,6 +254,80 @@ header {
     min-height: 300px;
 }
 
+/* Profile UI */
+.profile-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-form-container {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.profile-image-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+#profile-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--neon-primary);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+}
+
+.secondary-btn {
+    background: transparent;
+    border: 1px solid var(--neon-primary);
+    color: var(--text-main);
+    cursor: pointer;
+}
+
+.secondary-btn:hover {
+    background: rgba(139, 92, 246, 0.2);
+}
+
+.profile-details-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.form-group input {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-glass);
+    padding: 12px 20px;
+    border-radius: 12px;
+    color: var(--text-main);
+    font-size: 1rem;
+    transition: all var(--transition-speed);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--neon-primary);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+}
+
 /* Tasks UI */
 .task-input-container {
     display: flex;
@@ -244,7 +338,7 @@ header {
 
 #new-task-input {
     flex: 1;
-    background: rgba(0,0,0,0.2);
+    background: rgba(0, 0, 0, 0.2);
     border: 1px solid var(--border-glass);
     padding: 12px 20px;
     border-radius: 12px;
@@ -406,7 +500,7 @@ header {
     border-left: 4px solid var(--neon-primary);
     padding: 15px 25px;
     border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     gap: 15px;
@@ -433,26 +527,54 @@ header {
 }
 
 .toast-undo:hover {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 /* Animations */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes slideInRight {
-    from { opacity: 0; transform: translateX(100%); }
-    to { opacity: 1; transform: translateX(0); }
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 @keyframes slideOutRight {
-    from { opacity: 1; transform: translateX(0); }
-    to { opacity: 0; transform: translateX(100%); }
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
 }

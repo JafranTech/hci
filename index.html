@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
     <!-- Icons -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="app-container">
         <!-- Sidebar Navigation -->
@@ -53,20 +55,20 @@
                 </div>
                 <!-- User Profile simplified -->
                 <div class="user-avatar">
-                    <img src="https://i.pravatar.cc/150?img=11" alt="User Avatar">
+                    <img id="header-avatar" src="https://i.pravatar.cc/150?img=11" alt="User Avatar">
                 </div>
             </header>
 
             <!-- Pages -->
             <div class="pages-container">
-                
+
                 <!-- Home Page -->
                 <section id="page-home" class="page active">
                     <div class="glass-panel welcome-panel">
                         <h2>Welcome back, User! 👋</h2>
                         <p>Enjoy our new voice-guided navigation. Just click the mic and say "Go to Tasks".</p>
                     </div>
-                    
+
                     <div class="stats-grid">
                         <div class="glass-panel stat-card">
                             <i class="ri-task-line neon-icon glow-blue"></i>
@@ -96,23 +98,35 @@
                                 <i class="ri-add-line"></i> Add
                             </button>
                         </div>
-                        
+
                         <ul class="task-list" id="task-list">
-                            <!-- Tasks will be added here -->
-                            <li class="task-item">
-                                <span>Try voice navigation: "Go to Settings"</span>
-                                <button class="delete-btn"><i class="ri-delete-bin-line"></i></button>
-                            </li>
+                            <!-- Tasks will be added here dynamically via localStorage -->
                         </ul>
                     </div>
                 </section>
 
                 <!-- Profile Page -->
                 <section id="page-profile" class="page">
-                    <div class="glass-panel generic-empty-state">
-                        <i class="ri-user-star-line huge-icon glow-purple"></i>
+                    <div class="glass-panel profile-panel">
                         <h2>User Profile</h2>
-                        <p>Your details and preferences are managed here.</p>
+                        <div class="profile-form-container">
+                            <div class="profile-image-section">
+                                <img id="profile-preview" src="https://i.pravatar.cc/150?img=11" alt="Profile Preview">
+                                <label for="profile-image-upload" class="primary-btn secondary-btn">
+                                    <i class="ri-image-add-line"></i> Change Photo
+                                </label>
+                                <input type="file" id="profile-image-upload" accept="image/*" hidden>
+                            </div>
+                            <div class="profile-details-section">
+                                <div class="form-group">
+                                    <label for="profile-name">Full Name</label>
+                                    <input type="text" id="profile-name" placeholder="Enter your name">
+                                </div>
+                                <button id="save-profile-btn" class="primary-btn">
+                                    <i class="ri-save-line"></i> Save Profile
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -142,4 +156,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
