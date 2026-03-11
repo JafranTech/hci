@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskMaster - HCI Voice Nav</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">
+                <i class="ri-stack-line neon-icon"></i>
+                <h2>TaskMaster</h2>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-page="home">
+                    <i class="ri-home-5-line"></i>
+                    <span>Home</span>
+                </li>
+                <li data-page="tasks">
+                    <i class="ri-check-double-line"></i>
+                    <span>Tasks</span>
+                </li>
+                <li data-page="profile">
+                    <i class="ri-user-smile-line"></i>
+                    <span>Profile</span>
+                </li>
+                <li data-page="settings">
+                    <i class="ri-settings-4-line"></i>
+                    <span>Settings</span>
+                </li>
+            </ul>
+            <div class="hci-badge">
+                <i class="ri-award-fill"></i> HCI Compliant
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header>
+                <div class="header-title">
+                    <h1 id="page-title">Dashboard</h1>
+                    <p class="breadcrumb">TaskMaster / <span id="breadcrumb-current">Home</span></p>
+                </div>
+                <!-- User Profile simplified -->
+                <div class="user-avatar">
+                    <img src="https://i.pravatar.cc/150?img=11" alt="User Avatar">
+                </div>
+            </header>
+
+            <!-- Pages -->
+            <div class="pages-container">
+                
+                <!-- Home Page -->
+                <section id="page-home" class="page active">
+                    <div class="glass-panel welcome-panel">
+                        <h2>Welcome back, User! 👋</h2>
+                        <p>Enjoy our new voice-guided navigation. Just click the mic and say "Go to Tasks".</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="glass-panel stat-card">
+                            <i class="ri-task-line neon-icon glow-blue"></i>
+                            <div>
+                                <h3>Total Tasks</h3>
+                                <p class="stat-number">24</p>
+                            </div>
+                        </div>
+                        <div class="glass-panel stat-card">
+                            <i class="ri-checkbox-circle-line neon-icon glow-green"></i>
+                            <div>
+                                <h3>Completed</h3>
+                                <p class="stat-number">18</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tasks Page -->
+                <section id="page-tasks" class="page">
+                    <div class="glass-panel">
+                        <h2>Manage Your Tasks</h2>
+                        <!-- HCI Error Prevention: Form won't submit if empty -->
+                        <div class="task-input-container">
+                            <input type="text" id="new-task-input" placeholder="What needs to be done?">
+                            <button id="add-task-btn" class="primary-btn" disabled>
+                                <i class="ri-add-line"></i> Add
+                            </button>
+                        </div>
+                        
+                        <ul class="task-list" id="task-list">
+                            <!-- Tasks will be added here -->
+                            <li class="task-item">
+                                <span>Try voice navigation: "Go to Settings"</span>
+                                <button class="delete-btn"><i class="ri-delete-bin-line"></i></button>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Profile Page -->
+                <section id="page-profile" class="page">
+                    <div class="glass-panel generic-empty-state">
+                        <i class="ri-user-star-line huge-icon glow-purple"></i>
+                        <h2>User Profile</h2>
+                        <p>Your details and preferences are managed here.</p>
+                    </div>
+                </section>
+
+                <!-- Settings Page -->
+                <section id="page-settings" class="page">
+                    <div class="glass-panel generic-empty-state">
+                        <i class="ri-settings-3-line huge-icon glow-cyan"></i>
+                        <h2>System Settings</h2>
+                        <p>Adjust theme, notifications, and accessibility.</p>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Voice Navigation Button (FAB) -->
+    <div class="voice-nav-container">
+        <button id="voice-btn" class="voice-btn" aria-label="Voice Navigation">
+            <i class="ri-mic-line"></i>
+        </button>
+        <div class="voice-status" id="voice-status">Say something like "go to home"</div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
